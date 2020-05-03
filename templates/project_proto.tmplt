@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package {{.Name}};
+option go_package = ".;{{.Name}}";
+
+service {{.ProtoCapsName}} {
+  {{- range .Entities }}
+  rpc Create{{.ProtoCapsName}}(Create{{.ProtoCapsName}}Request) returns (Create{{.ProtoCapsName}}Response);
+  rpc Get{{.ProtoCapsName}}(Get{{.ProtoCapsName}}Request) returns (Get{{.ProtoCapsName}}Response);
+  rpc Update{{.ProtoCapsName}}(Update{{.ProtoCapsName}}Request) returns (Update{{.ProtoCapsName}}Response);
+  rpc Delete{{.ProtoCapsName}}(Delete{{.ProtoCapsName}}Request) returns (Delete{{.ProtoCapsName}}Response);
+
+  {{- end }}
+}
+
+{{- range .Entities }}
+
+message {{.ProtoCapsName}} {
+  {{- range $index, $field := .Fields}}
+  {{$field.Type}} {{$field.Name}} = {{inc $index}};
+  {{- end}}
+}
+
+message Create{{.ProtoCapsName}}Request {
+  {{.ProtoCapsName}} {{.Name}} = 1;
+}
+
+message Create{{.ProtoCapsName}}Response {
+  {{.ProtoCapsName}} created = 1;
+}
+
+message Get{{.ProtoCapsName}}Request {
+  {{- range .Fields}}
+  {{- if .IsPrimaryKey}}
+  {{.Type}} {{.Name}} = 1;
+  {{- end}}
+  {{- end}}
+}
+
+message Get{{.ProtoCapsName}}Response {
+  {{.ProtoCapsName}} {{.Name}} = 1;
+}
+
+message Update{{.ProtoCapsName}}Request {
+  {{.ProtoCapsName}} updated = 1;
+}
+
+message Update{{.ProtoCapsName}}Response {
+  {{.ProtoCapsName}} result = 1;
+}
+
+message Delete{{.ProtoCapsName}}Request {
+  {{- range .Fields}}
+  {{- if .IsPrimaryKey}}
+  {{.Type}} {{.Name}} = 1;
+  {{- end}}
+  {{- end}}
+}
+
+message Delete{{.ProtoCapsName}}Response {
+
+}
+{{- end }}
