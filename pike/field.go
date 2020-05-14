@@ -1,16 +1,48 @@
 package pike
 
-import ()
+import (
+	"strings"
+)
 
 type Field struct {
 	Name string `yaml:"name"`
 	Type string `yaml:"type"`
+
+	SQLTypeOverride string `yaml:"sql_type"`
 
 	IsPrimaryKey bool `yaml:"primary_key"`
 }
 
 func (f Field) GoName() string {
 	return GoCamelCase(f.Name)
+}
+
+func (f Field) SQLType() string {
+	if f.SQLTypeOverride != "" {
+		return strings.ToUpper(f.SQLTypeOverride)
+	}
+
+	if strings.HasPrefix(f.Type, "int") && f.IsPrimaryKey {
+		if f.Type == "int64" {
+			return "BIGSERIAL PRIMARY KEY"
+		}
+		return "SERIAL PRIMARY KEY"
+	}
+
+	sqlType := map[string]string{
+		"int32":  "INTEGER",
+		"int64":  "BIGINT",
+		"string": "TEXT",
+		"float":  "REAL",
+	}[f.Type]
+
+	if sqlType == "" {
+		sqlType = "TEXT"
+	}
+	if f.IsPrimaryKey {
+		sqlType += " PRIMARY KEY"
+	}
+	return sqlType
 }
 
 // Following code imported from package google.golang.org/protobuf/internal/strs

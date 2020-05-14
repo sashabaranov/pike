@@ -1,0 +1,6 @@
+{{- range $entityIx, $entity := .Entities }}CREATE TABLE {{$entity.SQLTableName}} (
+{{- range $ix, $field := $entity.Fields}}
+	{{$field.Name}} {{$field.SQLType}} {{- if not (last $ix $entity.Fields)}},{{- end}}
+{{- end }}
+);
+{{- end}}

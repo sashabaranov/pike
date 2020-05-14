@@ -1,9 +1,11 @@
 package main
 
 import (
-	// "fmt"
+	"fmt"
 	"github.com/sashabaranov/pike/pike"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 const testYAML = `
@@ -19,10 +21,18 @@ entities:
 `
 
 func main() {
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: pike <dir>")
+		return
+	}
+
+	projectDir := os.Args[1]
+
 	proj, err := pike.ProjectFromYAMLString(testYAML)
 	if err != nil {
 		log.Fatalf("Error unmarshalling yaml: %v", err)
 	}
 
-	proj.GenerateProto()
+	proj.GenerateProto(filepath.Join(projectDir, "proto/project.proto"))
+	proj.GenerateSQLMigrations(filepath.Join(projectDir, "sql/migrations"))
 }
