@@ -3,6 +3,7 @@ package pike
 import (
 	"errors"
 	"fmt"
+	"log"
 )
 
 type Entity struct {
@@ -36,4 +37,24 @@ func (e Entity) SQLTableName() string {
 	}
 
 	return fmt.Sprintf("%ss", e.Name)
+}
+
+func (e Entity) PrimaryKeyField() Field {
+	for _, field := range e.Fields {
+		if field.IsPrimaryKey {
+			return field
+		}
+	}
+	log.Printf("Entity %s does not have primary key", e.Name)
+	return Field{}
+}
+
+func (e Entity) NonPrimaryKeyFields() (fields []Field) {
+	for _, field := range e.Fields {
+		if field.IsPrimaryKey {
+			continue
+		}
+		fields = append(fields, field)
+	}
+	return
 }

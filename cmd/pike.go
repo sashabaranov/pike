@@ -13,7 +13,7 @@ name: backend
 entities:
   - name: animal
     fields:
-      - {name: id, type: int64, primary_key: true}
+      - {name: id, type: uint32, primary_key: true}
       - {name: name, type: string}
       - {name: password_hash, type: string}
       - {name: age, type: int32}
@@ -35,4 +35,5 @@ func main() {
 
 	proj.GenerateProto(filepath.Join(projectDir, "proto/project.proto"))
 	proj.GenerateSQLMigrations(filepath.Join(projectDir, "sql/migrations"))
+	proj.GenerateGoFiles(filepath.Join(projectDir, "backend"))
 }

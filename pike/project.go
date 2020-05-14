@@ -58,10 +58,13 @@ func (p Project) GenerateSQLMigrations(path string) {
 		path,
 		fmt.Sprintf("%s_initial", version),
 	)
-	fmt.Println("Path prefix: ", pathPrefix)
 
 	p.executeTemplate("initial_migration.up.sql.tmplt", fmt.Sprintf("%s.up.sql", pathPrefix))
 	p.executeTemplate("initial_migration.down.sql.tmplt", fmt.Sprintf("%s.down.sql", pathPrefix))
+}
+
+func (p Project) GenerateGoFiles(path string) {
+	p.executeTemplate("storage.go.tmplt", filepath.Join(path, "storage.go"))
 
 }
 

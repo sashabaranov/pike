@@ -17,13 +17,17 @@ func (f Field) GoName() string {
 	return GoCamelCase(f.Name)
 }
 
+func (f Field) GoType() string {
+	return f.Type
+}
+
 func (f Field) SQLType() string {
 	if f.SQLTypeOverride != "" {
 		return strings.ToUpper(f.SQLTypeOverride)
 	}
 
-	if strings.HasPrefix(f.Type, "int") && f.IsPrimaryKey {
-		if f.Type == "int64" {
+	if strings.HasPrefix(f.Type, "uint") && f.IsPrimaryKey {
+		if f.Type == "uint64" {
 			return "BIGSERIAL PRIMARY KEY"
 		}
 		return "SERIAL PRIMARY KEY"

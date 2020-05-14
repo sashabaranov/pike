@@ -12,3 +12,5 @@ protoc\
 	-I $DIR/proto/\
 	$DIR/proto/project.proto\
 	--go_out=plugins=grpc:$DIR/backend
+
+mkdir -p $DIR/backend
