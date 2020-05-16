@@ -10,6 +10,7 @@ import (
 
 const testYAML = `
 name: backend
+go_import_path: github.com/sashabaranov/testbackend
 entities:
   - name: animal
     fields:
@@ -22,11 +23,12 @@ entities:
 
 func main() {
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: pike <dir>")
+		fmt.Println("Usage: pike <project path inside Go path>")
 		return
 	}
 
-	projectDir := os.Args[1]
+	goPath := os.Getenv("GOPATH")
+	projectDir := filepath.Join(goPath, "src", os.Args[1])
 
 	proj, err := pike.ProjectFromYAMLString(testYAML)
 	if err != nil {
@@ -35,5 +37,7 @@ func main() {
 
 	proj.GenerateProto(filepath.Join(projectDir, "proto/project.proto"))
 	proj.GenerateSQLMigrations(filepath.Join(projectDir, "sql/migrations"))
-	proj.GenerateGoFiles(filepath.Join(projectDir, "backend"))
+	proj.GenerateGoFiles(filepath.Join(projectDir, proj.Name))
+	proj.GenerateConfigFiles(filepath.Join(projectDir, "configs"))
+	proj.GenerateLauncher(filepath.Join(projectDir, "cli"))
 }

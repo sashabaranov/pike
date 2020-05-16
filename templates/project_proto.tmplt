@@ -30,11 +30,7 @@ message Create{{.ProtoCapsName}}Response {
 }
 
 message Get{{.ProtoCapsName}}Request {
-  {{- range .Fields}}
-  {{- if .IsPrimaryKey}}
-  {{.Type}} {{.Name}} = 1;
-  {{- end}}
-  {{- end}}
+  {{.PrimaryKeyField.Type}} {{.PrimaryKeyField.Name}} = 1;
 }
 
 message Get{{.ProtoCapsName}}Response {
@@ -50,11 +46,7 @@ message Update{{.ProtoCapsName}}Response {
 }
 
 message Delete{{.ProtoCapsName}}Request {
-  {{- range .Fields}}
-  {{- if .IsPrimaryKey}}
-  {{.Type}} {{.Name}} = 1;
-  {{- end}}
-  {{- end}}
+  {{.PrimaryKeyField.Type}} {{.PrimaryKeyField.Name}} = 1;
 }
 
 message Delete{{.ProtoCapsName}}Response {

@@ -1,0 +1,9 @@
+package main
+
+import (
+	"{{.GoImportPath}}/{{.Name}}"
+)
+
+func main() {
+	{{.Name}}.RunServer()
+}

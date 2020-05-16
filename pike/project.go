@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -13,6 +14,10 @@ import (
 type Project struct {
 	Name     string   `yaml:"name"`
 	Entities []Entity `yaml:"entities"`
+
+	GoImportPath string `yaml:"go_import_path"`
+
+	OverrideConfigEnvVar string `yaml:"config_env_var"`
 }
 
 func ProjectFromYAMLString(yamlStr string) (proj Project, err error) {
@@ -23,6 +28,13 @@ func ProjectFromYAMLString(yamlStr string) (proj Project, err error) {
 
 func (p Project) ProtoCapsName() string {
 	return GoCamelCase(p.Name)
+}
+
+func (p Project) ConfigEnvVariable() string {
+	if p.OverrideConfigEnvVar != "" {
+		return p.OverrideConfigEnvVar
+	}
+	return fmt.Sprintf("%s_CONFIG", strings.ToUpper(p.Name))
 }
 
 func (p Project) Validate() {
@@ -64,8 +76,37 @@ func (p Project) GenerateSQLMigrations(path string) {
 }
 
 func (p Project) GenerateGoFiles(path string) {
-	p.executeTemplate("storage.go.tmplt", filepath.Join(path, "storage.go"))
+	files := []string{
+		"storage.go",
+		"server.go",
+		"report_error.go",
+		"config.go",
+		"run.go",
+	}
 
+	for _, filename := range files {
+		fmt.Printf("⚙️  Generating %s\n", filename)
+		p.executeTemplate(
+			fmt.Sprintf("%s.tmplt", filename),
+			filepath.Join(path, filename),
+		)
+	}
+}
+
+func (p Project) GenerateConfigFiles(path string) {
+	fmt.Println("⚙️  Generating config file")
+	p.executeTemplate(
+		"config.yaml.tmplt",
+		filepath.Join(path, "dev.yaml"),
+	)
+}
+
+func (p Project) GenerateLauncher(path string) {
+	fmt.Println("⚙️  Generating launch file")
+	p.executeTemplate(
+		"launcher.go.tmplt",
+		filepath.Join(path, "main.go"),
+	)
 }
 
 func (p Project) executeTemplate(templateName, outputPath string) {

@@ -1,0 +1,65 @@
+package {{.Name}}
+
+import (
+	"context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+)
+
+type Server struct {
+	Unimplemented{{.ProtoCapsName}}Server
+	storage *PostgreStorage
+}
+
+func (s *Server) Cleanup() {
+	s.storage.db.Close()
+}
+
+{{- range  .Entities }}
+
+func (s *Server) Create{{.ProtoCapsName}}(ctx context.Context, req *Create{{.ProtoCapsName}}Request) (*Create{{.ProtoCapsName}}Response, error) {
+	created, err := s.storage.Create{{.ProtoCapsName}}(req.{{.ProtoCapsName}})
+	if err != nil {
+		reportError("Error in Create{{.ProtoCapsName}}", err)
+		return nil, status.Error(codes.Internal, "Internal error")
+	}
+	return &Create{{.ProtoCapsName}}Response{
+		Created: created,
+	}, nil
+}
+
+func (s *Server) Get{{.ProtoCapsName}}(ctx context.Context, req *Get{{.ProtoCapsName}}Request) (*Get{{.ProtoCapsName}}Response, error) {
+	ret, err := s.storage.Get{{.ProtoCapsName}}(req.{{.PrimaryKeyField.GoName}})
+	if err != nil {
+		reportError("Error in Get{{.ProtoCapsName}}", err)
+		return nil, status.Error(codes.Internal, "Internal error")
+	}
+
+	return &Get{{.ProtoCapsName}}Response{
+		{{.ProtoCapsName}}: ret,
+	}, nil
+}
+
+func (s *Server) Update{{.ProtoCapsName}}(ctx context.Context, req *Update{{.ProtoCapsName}}Request) (*Update{{.ProtoCapsName}}Response, error) {
+	updated, err := s.storage.Update{{.ProtoCapsName}}(req.Updated)
+	if err != nil {
+		reportError("Error in Update{{.ProtoCapsName}}", err)
+		return nil, status.Error(codes.Internal, "Internal error")
+	}
+
+	return &Update{{.ProtoCapsName}}Response{
+		Result: updated,
+	}, nil
+}
+
+func (s *Server) Delete{{.ProtoCapsName}}(ctx context.Context, req *Delete{{.ProtoCapsName}}Request) (*Delete{{.ProtoCapsName}}Response, error) {
+	err := s.storage.Delete{{.ProtoCapsName}}(req.{{.PrimaryKeyField.GoName}})
+	if err != nil {
+		reportError("Error in Delete{{.ProtoCapsName}}", err)
+		return nil, status.Error(codes.Internal, "Internal error")
+	}
+	return &Delete{{.ProtoCapsName}}Response{}, nil
+}
+
+
+{{- end }}
