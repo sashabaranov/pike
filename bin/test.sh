@@ -5,7 +5,7 @@ PROJ=github.com/sashabaranov/testbackend
 DIR=$GOPATH/src/$PROJ
 true | rm -rf $DIR
 
-go run cmd/pike.go examples/animals.yaml
+go run pike.go examples/animals.yaml
 
 protoc\
 	-I $DIR/proto/\
