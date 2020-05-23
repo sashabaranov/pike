@@ -27,7 +27,7 @@ Pike will generate ([example output](https://github.com/sashabaranov/pike/tree/m
 * gRPC Protobuf service description with basic Create, Read, Update, Delete operations
 * Go implementation of gRPC service 
   * Supports all CRUD SQL queries
-  * No additional framework usage. Only depends on `grpc` and `pq`.
+  * No additional framework usage. Only depends on `grpc` and `pq`
   * TLS support
   
   
