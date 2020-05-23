@@ -11,7 +11,7 @@ mkdir -p $DIR/sql/migrations
 mkdir -p $DIR/configs
 mkdir -p $DIR/cli
 
-go run cmd/pike.go $PROJ
+go run cmd/pike.go examples/animals.yaml
 
 protoc\
 	-I $DIR/proto/\
