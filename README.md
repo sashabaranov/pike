@@ -45,6 +45,7 @@ DIR=$GOPATH/src/$PROJ
 true | rm -rf $DIR
 
 # Generate project
+cd $GOPATH/src/github.com/sashabaranov/pike # for templates
 pike examples/animals.yaml
 
 
