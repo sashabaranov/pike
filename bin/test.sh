@@ -2,14 +2,8 @@
 
 
 PROJ=github.com/sashabaranov/testbackend
-
 DIR=$GOPATH/src/$PROJ
 true | rm -rf $DIR
-mkdir -p $DIR/proto
-mkdir -p $DIR/backend
-mkdir -p $DIR/sql/migrations
-mkdir -p $DIR/configs
-mkdir -p $DIR/cli
 
 go run cmd/pike.go examples/animals.yaml
 

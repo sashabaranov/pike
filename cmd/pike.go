@@ -27,9 +27,9 @@ func main() {
 		return
 	}
 
-	goPath := os.Getenv("GOPATH")
-	projectDir := filepath.Join(goPath, "src", proj.GoImportPath)
+	proj.CreateDirectories()
 
+	projectDir := proj.AbsolutePath()
 	proj.GenerateProto(filepath.Join(projectDir, "proto/project.proto"))
 	proj.GenerateSQLMigrations(filepath.Join(projectDir, "sql/migrations"))
 	proj.GenerateGoFiles(filepath.Join(projectDir, proj.Name))

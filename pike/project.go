@@ -128,6 +128,31 @@ func (p Project) executeTemplate(templateName, outputPath string) {
 	}
 }
 
+func (p Project) CreateDirectories() {
+	dirs := []string{
+		"proto",
+		"backend",
+		"sql/migrations",
+		"configs",
+		"cli",
+		"bin",
+	}
+
+	for _, dir := range dirs {
+		path := filepath.Join(p.AbsolutePath(), dir)
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			log.Fatalf("Error creating directory %s: %v", dir, err)
+		}
+		fmt.Printf("📂 Created directory %s\n", path)
+	}
+}
+
+func (p Project) AbsolutePath() string {
+	goPath := os.Getenv("GOPATH")
+	return filepath.Join(goPath, "src", p.GoImportPath)
+}
+
 func timeVersion() string {
 	return time.Now().Format("20060102150405")
 }
