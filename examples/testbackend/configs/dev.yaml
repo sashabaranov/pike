@@ -1,0 +1,6 @@
+listen_on: 0.0.0.0:8000
+db_uri: postgres://localhost:5432/backend?sslmode=disable
+max_message_size_bytes: 500000000
+server_cert: certs/dev/localhost.crt
+server_key: certs/dev/localhost.key
+ca_cert: certs/dev/CA.crt

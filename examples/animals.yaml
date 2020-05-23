@@ -5,6 +5,5 @@ entities:
     fields:
       - {name: id, type: uint32, primary_key: true}
       - {name: name, type: string}
-      - {name: password_hash, type: string}
       - {name: age, type: int32}
-      - {name: userpic_url, type: string}
+      - {name: photo_url, type: string}
