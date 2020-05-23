@@ -33,20 +33,29 @@ Pike will generate ([example output](https://github.com/sashabaranov/pike/tree/m
   
 #### Usage
 
+Install pike: `go get github.com/sashabaranov/pike`
+
+Generate all the stuff:
+
 
 ```bash
+# Cleanup
 PROJ=github.com/sashabaranov/testbackend
 DIR=$GOPATH/src/$PROJ
 true | rm -rf $DIR
 
-go run cmd/pike.go examples/animals.yaml
+# Generate project
+pike examples/animals.yaml
 
+
+# Generate protobuf
 protoc\
 	-I $DIR/proto/\
 	$DIR/proto/project.proto\
 	--go_out=plugins=grpc:$DIR/backend
 
 
+# Generate certificates
 CERT_DIR=$DIR/certs/dev
 mkdir -p $CERT_DIR
 
