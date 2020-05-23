@@ -22,7 +22,7 @@ entities:
       - {name: photo_url, type: string}
 ```
 
-Pike will generate
+Pike will generate ([example output](https://github.com/sashabaranov/pike/tree/master/examples/testbackend))
 * PostgreSQL migration(`CREATE TABLE`) compatible with [migrate](https://github.com/golang-migrate/migrate) tool
 * gRPC Protobuf service description with basic Create, Read, Update, Delete operations
 * Go implementation of gRPC service 
@@ -34,7 +34,7 @@ Pike will generate
 #### Usage
 
 
-```
+```bash
 PROJ=github.com/sashabaranov/testbackend
 DIR=$GOPATH/src/$PROJ
 true | rm -rf $DIR
