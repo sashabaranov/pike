@@ -131,7 +131,7 @@ func (p Project) executeTemplate(templateName, outputPath string) {
 func (p Project) CreateDirectories() {
 	dirs := []string{
 		"proto",
-		"backend",
+		p.Name,
 		"sql/migrations",
 		"configs",
 		"cli",
