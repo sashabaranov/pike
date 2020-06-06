@@ -5,9 +5,9 @@ Generate CRUD gRPC backends from single YAML description.
 
 #### Usage
 
-Install pike: `go get github.com/sashabaranov/pike`
+Install: `go get github.com/sashabaranov/pike`
 
-Run pike: `pike project.yaml`
+Run: `pike project.yaml`
 
 #### Example
 
