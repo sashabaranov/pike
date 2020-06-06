@@ -109,6 +109,22 @@ func (p Project) GenerateLauncher(path string) {
 	)
 }
 
+func (p Project) GenerateBinScripts(path string) {
+	fmt.Println("⚙️  Generating bin/ scripts")
+	p.executeTemplate(
+		"run.sh.tmplt",
+		filepath.Join(path, "run.sh"),
+	)
+
+	p.executeTemplate(
+		"compile_proto.sh.tmplt",
+		filepath.Join(path, "compile_proto.sh"),
+	)
+
+	os.Chmod(filepath.Join(path, "run.sh"), 0755)
+	os.Chmod(filepath.Join(path, "compile_proto.sh"), 0755)
+}
+
 func (p Project) executeTemplate(templateName, outputPath string) {
 	templatePath := fmt.Sprintf("templates/%s", templateName)
 	t, err := template.New(templateName).Funcs(templateFuncMap).ParseFiles(templatePath)

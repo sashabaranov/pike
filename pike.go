@@ -38,4 +38,5 @@ func main() {
 	proj.GenerateGoFiles(filepath.Join(projectDir, proj.Name))
 	proj.GenerateConfigFiles(filepath.Join(projectDir, "configs"))
 	proj.GenerateLauncher(filepath.Join(projectDir, "cli"))
+	proj.GenerateBinScripts(filepath.Join(projectDir, "bin"))
 }

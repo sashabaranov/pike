@@ -7,12 +7,6 @@ true | rm -rf $DIR
 
 go run pike.go examples/animals.yaml
 
-protoc\
-	-I $DIR/proto/\
-	$DIR/proto/project.proto\
-	--go_out=plugins=grpc:$DIR/backend
-
-
 CERT_DIR=$DIR/certs/dev
 mkdir -p $CERT_DIR
 

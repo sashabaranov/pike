@@ -1,0 +1,3 @@
+#!/bin/bash
+export {{.ConfigEnvVariable}}=$GOPATH/src/{{.GoImportPath}}/configs/dev.yaml
+go run $GOPATH/src/{{.GoImportPath}}/cli/main.go
