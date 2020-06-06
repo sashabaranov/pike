@@ -34,6 +34,8 @@ func (f Field) SQLType() string {
 	}
 
 	sqlType := map[string]string{
+		"uint32": "INTEGER",
+		"uint64": "BIGINT",
 		"int32":  "INTEGER",
 		"int64":  "BIGINT",
 		"string": "TEXT",
