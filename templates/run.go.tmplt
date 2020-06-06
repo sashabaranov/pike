@@ -1,6 +1,8 @@
 package {{.Name}}
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/auth"
@@ -10,7 +12,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -28,6 +32,7 @@ func panicRecover(p interface{}) error {
 func RunServer() {
 	config := LoadConfig()
 	server := NewServerFromConfig(config)
+	defer server.Cleanup()
 
 	// if config.SentryDSN != "" {
 	// 	sentry.Init(sentry.ClientOptions{Dsn: config.SentryDSN})
@@ -83,4 +88,25 @@ func makeServerOptions(config ServerConfig) []grpc.ServerOption {
 			grpc_recovery.StreamServerInterceptor(recoverOptions...),
 		),
 	}
+}
+
+func getTransportCredentials(cfg ServerConfig) (*credentials.TransportCredentials, error) {
+	peerCert, err := tls.LoadX509KeyPair(cfg.ServerCert, cfg.ServerKey)
+	if err != nil {
+		return nil, err
+	}
+
+	caCert, err := ioutil.ReadFile(cfg.CACert)
+	if err != nil {
+		return nil, err
+	}
+
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+	tc := credentials.NewTLS(&tls.Config{
+		Certificates: []tls.Certificate{peerCert},
+		ClientCAs:    caCertPool,
+	})
+
+	return &tc, nil
 }

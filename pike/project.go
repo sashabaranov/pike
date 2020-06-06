@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
 	"time"
 )
 
@@ -47,21 +46,7 @@ func (p Project) Validate() {
 }
 
 func (p Project) GenerateProto(path string) {
-	t, err := template.New("project_proto.tmplt").Funcs(templateFuncMap).ParseFiles("templates/project_proto.tmplt")
-	if err != nil {
-		log.Fatalf("Error parsing template: %v", err)
-	}
-
-	outputFile, err := os.Create(path)
-	if err != nil {
-		log.Fatalf("Error creating output file: %v", err)
-	}
-	defer outputFile.Close()
-
-	err = t.Execute(outputFile, p)
-	if err != nil {
-		log.Fatalf("Error executing template: %v", err)
-	}
+	executeTemplate("project_proto.tmplt", path, p)
 }
 
 func (p Project) GenerateSQLMigrations(path string) {
@@ -71,8 +56,8 @@ func (p Project) GenerateSQLMigrations(path string) {
 		fmt.Sprintf("%s_initial", version),
 	)
 
-	p.executeTemplate("initial_migration.up.sql.tmplt", fmt.Sprintf("%s.up.sql", pathPrefix))
-	p.executeTemplate("initial_migration.down.sql.tmplt", fmt.Sprintf("%s.down.sql", pathPrefix))
+	executeTemplate("initial_migration.up.sql.tmplt", fmt.Sprintf("%s.up.sql", pathPrefix), p)
+	executeTemplate("initial_migration.down.sql.tmplt", fmt.Sprintf("%s.down.sql", pathPrefix), p)
 }
 
 func (p Project) GenerateGoFiles(path string) {
@@ -80,68 +65,75 @@ func (p Project) GenerateGoFiles(path string) {
 		"storage.go",
 		"server.go",
 		"report_error.go",
-		"config.go",
 		"run.go",
 	}
 
 	for _, filename := range files {
 		fmt.Printf("⚙️  Generating %s\n", filename)
-		p.executeTemplate(
+		executeTemplate(
 			fmt.Sprintf("%s.tmplt", filename),
 			filepath.Join(path, filename),
+			p,
 		)
+	}
+
+	for _, entity := range p.Entities {
+		fmt.Printf("🌸  Generating %ss\n", entity.Name)
+		perEntityFiles := []string{
+			fmt.Sprintf("server_%s.go", entity.Name),
+			fmt.Sprintf("storage_%s.go", entity.Name),
+		}
+		tmpProject := Project{
+			Name:     p.Name,
+			Entities: []Entity{entity},
+		}
+
+		for _, filename := range perEntityFiles {
+			fmt.Printf("\tGenerating %s\n", filename)
+			templateName := strings.ReplaceAll(filename, entity.Name, "entity")
+			executeTemplate(
+				fmt.Sprintf("%s.tmplt", templateName),
+				filepath.Join(path, filename),
+				tmpProject,
+			)
+		}
 	}
 }
 
 func (p Project) GenerateConfigFiles(path string) {
 	fmt.Println("⚙️  Generating config file")
-	p.executeTemplate(
+	executeTemplate(
 		"config.yaml.tmplt",
 		filepath.Join(path, "dev.yaml"),
+		p,
 	)
 }
 
 func (p Project) GenerateLauncher(path string) {
 	fmt.Println("⚙️  Generating launch file")
-	p.executeTemplate(
+	executeTemplate(
 		"launcher.go.tmplt",
 		filepath.Join(path, "main.go"),
+		p,
 	)
 }
 
 func (p Project) GenerateBinScripts(path string) {
 	fmt.Println("⚙️  Generating bin/ scripts")
-	p.executeTemplate(
+	executeTemplate(
 		"run.sh.tmplt",
 		filepath.Join(path, "run.sh"),
+		p,
 	)
 
-	p.executeTemplate(
+	executeTemplate(
 		"compile_proto.sh.tmplt",
 		filepath.Join(path, "compile_proto.sh"),
+		p,
 	)
 
 	os.Chmod(filepath.Join(path, "run.sh"), 0755)
 	os.Chmod(filepath.Join(path, "compile_proto.sh"), 0755)
-}
-
-func (p Project) executeTemplate(templateName, outputPath string) {
-	templatePath := fmt.Sprintf("templates/%s", templateName)
-	t, err := template.New(templateName).Funcs(templateFuncMap).ParseFiles(templatePath)
-	if err != nil {
-		log.Fatalf("Error parsing template: %v", err)
-	}
-
-	outputFile, err := os.Create(outputPath)
-	if err != nil {
-		log.Fatalf("Error creating output file: %v", err)
-	}
-	defer outputFile.Close()
-
-	err = t.Execute(outputFile, p)
-	if err != nil {
-		log.Fatalf("Error executing template: %v", err)
-	}
 }
 
 func (p Project) CreateDirectories() {
