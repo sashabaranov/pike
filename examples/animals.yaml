@@ -4,6 +4,6 @@ entities:
   - name: animal
     fields:
       - {name: id, type: uint32, primary_key: true}
-      - {name: name, type: string}
+      - {name: name, type: string, sql_type: "VARCHAR(128)"}
       - {name: age, type: int32}
       - {name: photo_url, type: string}

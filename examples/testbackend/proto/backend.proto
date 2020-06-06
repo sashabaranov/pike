@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package backend;
+option go_package = ".;backend";
+
+service Backend {
+    rpc CreateAnimal(CreateAnimalRequest) returns (CreateAnimalResponse);
+    rpc GetAnimal(GetAnimalRequest) returns (GetAnimalResponse);
+    rpc UpdateAnimal(UpdateAnimalRequest) returns (UpdateAnimalResponse);
+    rpc DeleteAnimal(DeleteAnimalRequest) returns (DeleteAnimalResponse);
+}
+
+message Animal {
+    uint32 id = 1;
+    string name = 2;
+    int32 age = 3;
+    string photo_url = 4;
+}
+
+message CreateAnimalRequest {
+    Animal animal = 1;
+}
+
+message CreateAnimalResponse {
+    Animal created = 1;
+}
+
+message GetAnimalRequest {
+    uint32 id = 1;
+}
+
+message GetAnimalResponse {
+    Animal animal = 1;
+}
+
+message UpdateAnimalRequest {
+    Animal updated = 1;
+}
+
+message UpdateAnimalResponse {
+    Animal result = 1;
+}
+
+message DeleteAnimalRequest {
+    uint32 id = 1;
+}
+
+message DeleteAnimalResponse {
+
+}
