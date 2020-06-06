@@ -3,11 +3,11 @@
 Generate CRUD gRPC backends from single YAML description.
 
 
-#### Example
+#### Usage
+
+Install pike: `go get github.com/sashabaranov/pike`
 
 Let's say we want to have backend to keep data on friendly animals.
-
-
 From following description:
 
 ```yaml
@@ -17,7 +17,7 @@ entities:
   - name: animal
     fields:
       - {name: id, type: uint32, primary_key: true}
-      - {name: name, type: string}
+      - {name: name, type: string, sql_type: "VARCHAR(128)"}
       - {name: age, type: int32}
       - {name: photo_url, type: string}
 ```
@@ -30,42 +30,6 @@ Pike will generate ([example output](https://github.com/sashabaranov/pike/tree/m
   * No additional framework usage. Only depends on `grpc` and `pq`
   * TLS support
   
-  
-#### Usage
+Pike's output:
 
-Install pike: `go get github.com/sashabaranov/pike`
-
-Generate all the stuff:
-
-
-```bash
-# Cleanup
-PROJ=github.com/sashabaranov/testbackend
-DIR=$GOPATH/src/$PROJ
-true | rm -rf $DIR
-
-# Generate project
-cd $GOPATH/src/github.com/sashabaranov/pike # for templates
-pike examples/animals.yaml
-
-
-# Generate protobuf
-protoc\
-	-I $DIR/proto/\
-	$DIR/proto/project.proto\
-	--go_out=plugins=grpc:$DIR/backend
-
-
-# Generate certificates
-CERT_DIR=$DIR/certs/dev
-mkdir -p $CERT_DIR
-
-echo "\n🔖  Generating CA certificate..."
-certstrap --depot-path $CERT_DIR init --expires "30 years" --common-name "CA"
-
-echo "\n🔖  Generating server certificate..."
-certstrap --depot-path $CERT_DIR request-cert --domain localhost
-
-echo "\n🔖  Signing server certificate with CA..."
-certstrap --depot-path $CERT_DIR sign localhost --CA CA
-```
+![](https://i.imgur.com/k7htnKq.png)
