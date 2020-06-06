@@ -18,8 +18,14 @@ var templateFuncMap = template.FuncMap{
 }
 
 func executeTemplate(templateName, outputPath string, data interface{}) {
-	templatePath := fmt.Sprintf("templates/%s", templateName)
-	t, err := template.New(templateName).Funcs(templateFuncMap).ParseFiles(templatePath)
+	templatePath := fmt.Sprintf("/templates/%s", templateName)
+
+	templateText, present := Assets.Files[templatePath]
+	if !present {
+		log.Fatalf("Could not find template %s", templatePath)
+	}
+
+	t, err := template.New(templateName).Funcs(templateFuncMap).Parse(string(templateText.Data))
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
