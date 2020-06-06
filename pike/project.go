@@ -69,7 +69,7 @@ func (p Project) GenerateGoFiles(path string) {
 	}
 
 	for _, filename := range files {
-		fmt.Printf("⚙️  Generating %s\n", filename)
+		fmt.Printf("🌿  Generating %s\n", filename)
 		executeTemplate(
 			fmt.Sprintf("%s.tmplt", filename),
 			filepath.Join(path, filename),
@@ -101,7 +101,7 @@ func (p Project) GenerateGoFiles(path string) {
 }
 
 func (p Project) GenerateConfigFiles(path string) {
-	fmt.Println("⚙️  Generating config file")
+	fmt.Println("🌿  Generating config file")
 	executeTemplate(
 		"config.yaml.tmplt",
 		filepath.Join(path, "dev.yaml"),
@@ -110,7 +110,7 @@ func (p Project) GenerateConfigFiles(path string) {
 }
 
 func (p Project) GenerateLauncher(path string) {
-	fmt.Println("⚙️  Generating launch file")
+	fmt.Println("🌿  Generating launch file")
 	executeTemplate(
 		"launcher.go.tmplt",
 		filepath.Join(path, "main.go"),
@@ -119,7 +119,7 @@ func (p Project) GenerateLauncher(path string) {
 }
 
 func (p Project) GenerateBinScripts(path string) {
-	fmt.Println("⚙️  Generating bin/ scripts")
+	fmt.Println("🌿  Generating bin/ scripts")
 	executeTemplate(
 		"run.sh.tmplt",
 		filepath.Join(path, "run.sh"),
@@ -160,7 +160,7 @@ func (p Project) CreateDirectories() {
 		if err != nil {
 			log.Fatalf("Error creating directory %s: %v", dir, err)
 		}
-		fmt.Printf("📂 Created directory %s\n", path)
+		fmt.Printf("💎 Created directory %s\n", path)
 	}
 }
 
