@@ -27,6 +27,7 @@ func main() {
 		return
 	}
 
+	proj.CheckDirectoryNotPresent()
 	proj.CreateDirectories()
 
 	projectDir := proj.AbsolutePath()

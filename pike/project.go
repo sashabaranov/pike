@@ -136,6 +136,14 @@ func (p Project) GenerateBinScripts(path string) {
 	os.Chmod(filepath.Join(path, "compile_proto.sh"), 0755)
 }
 
+func (p Project) CheckDirectoryNotPresent() {
+	_, err := os.Stat(p.AbsolutePath())
+	if !os.IsNotExist(err) {
+		fmt.Printf("Project directory must not exist. Try rm -r %s\n", p.AbsolutePath())
+		os.Exit(0)
+	}
+}
+
 func (p Project) CreateDirectories() {
 	dirs := []string{
 		"proto",
