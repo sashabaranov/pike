@@ -16,7 +16,7 @@ From following description:
 
 ```yaml
 name: backend
-go_import_path: github.com/sashabaranov/testbackend
+go_import_path: github.com/user/testbackend
 entities:
   - name: animal
     fields:
@@ -36,4 +36,4 @@ Pike will generate ([example output](https://github.com/sashabaranov/pike/tree/m
   
 Pike's output:
 
-![](https://i.imgur.com/k7htnKq.png)
+![](https://i.imgur.com/9RLweIk.png)
