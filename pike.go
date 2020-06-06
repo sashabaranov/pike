@@ -30,7 +30,10 @@ func main() {
 	proj.CreateDirectories()
 
 	projectDir := proj.AbsolutePath()
-	proj.GenerateProto(filepath.Join(projectDir, "proto/project.proto"))
+
+	protobufFile := fmt.Sprintf("proto/%s.proto", proj.Name)
+	proj.GenerateProto(filepath.Join(projectDir, protobufFile))
+
 	proj.GenerateSQLMigrations(filepath.Join(projectDir, "sql/migrations"))
 	proj.GenerateGoFiles(filepath.Join(projectDir, proj.Name))
 	proj.GenerateConfigFiles(filepath.Join(projectDir, "configs"))
