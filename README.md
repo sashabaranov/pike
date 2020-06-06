@@ -27,26 +27,36 @@ Pike will generate ([example output](https://github.com/sashabaranov/pike/tree/m
 * gRPC Protobuf service description with basic Create, Read, Update, Delete operations
 * Go implementation of gRPC service 
   * Supports all CRUD SQL queries
-  * No additional framework usage. Only depends on `grpc` and `pq`.
+  * No additional framework usage. Only depends on `grpc` and `pq`
   * TLS support
   
   
 #### Usage
 
+Install pike: `go get github.com/sashabaranov/pike`
+
+Generate all the stuff:
+
 
 ```bash
+# Cleanup
 PROJ=github.com/sashabaranov/testbackend
 DIR=$GOPATH/src/$PROJ
 true | rm -rf $DIR
 
-go run cmd/pike.go examples/animals.yaml
+# Generate project
+cd $GOPATH/src/github.com/sashabaranov/pike # for templates
+pike examples/animals.yaml
 
+
+# Generate protobuf
 protoc\
 	-I $DIR/proto/\
 	$DIR/proto/project.proto\
 	--go_out=plugins=grpc:$DIR/backend
 
 
+# Generate certificates
 CERT_DIR=$DIR/certs/dev
 mkdir -p $CERT_DIR
 
