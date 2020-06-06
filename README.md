@@ -7,6 +7,10 @@ Generate CRUD gRPC backends from single YAML description.
 
 Install pike: `go get github.com/sashabaranov/pike`
 
+Run pike: `pike project.yaml`
+
+#### Example
+
 Let's say we want to have backend to keep data on friendly animals.
 From following description:
 
