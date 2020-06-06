@@ -1,6 +1,8 @@
 {{- range $entityIx, $entity := .Entities }}CREATE TABLE {{$entity.SQLTableName}} (
 {{- range $ix, $field := $entity.Fields}}
-	{{$field.Name}} {{$field.SQLType}} {{- if not (last $ix $entity.Fields)}},{{- end}}
+	{{$field.Name}} {{$field.SQLType}},
 {{- end }}
+	created timestamp(0) without time zone default (now() at time zone 'utc')
 );
-{{- end}}
+
+{{end}}

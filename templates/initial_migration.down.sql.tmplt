@@ -1,2 +1,2 @@
 {{- range .Entities }}DROP TABLE IF EXISTS {{.SQLTableName}};
-{{- end}}
+{{end}}
