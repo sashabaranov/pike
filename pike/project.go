@@ -160,7 +160,7 @@ func (p Project) CreateDirectories() {
 		if err != nil {
 			log.Fatalf("Error creating directory %s: %v", dir, err)
 		}
-		fmt.Printf("💎 Created directory %s\n", path)
+		fmt.Printf("💎 Created directory %s\n", dir)
 	}
 }
 

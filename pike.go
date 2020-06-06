@@ -40,4 +40,6 @@ func main() {
 	proj.GenerateConfigFiles(filepath.Join(projectDir, "configs"))
 	proj.GenerateLauncher(filepath.Join(projectDir, "cli"))
 	proj.GenerateBinScripts(filepath.Join(projectDir, "bin"))
+
+	proj.PrintOutro()
 }
