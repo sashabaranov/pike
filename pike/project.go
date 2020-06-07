@@ -175,6 +175,7 @@ func (p Project) CompileProtobuf() {
 	err := p.compileProto()
 	if err != nil {
 		fmt.Printf("❌  Failed to compile protobuf. Try %s yourself\n", Bold(Magenta("bin/compile_proto.sh")))
+		return
 	}
 
 	fmt.Printf("🌸  Compiled protobuf. Use %s in the future!\n", Bold(Magenta("bin/compile_proto.sh")))
