@@ -68,6 +68,7 @@ func (p Project) GenerateGoFiles(path string) {
 		"server.go",
 		"report_error.go",
 		"run.go",
+		"auth.go",
 	}
 
 	for _, filename := range files {
