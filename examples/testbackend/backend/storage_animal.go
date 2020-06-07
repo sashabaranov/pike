@@ -18,16 +18,15 @@ func (storage *PostgreStorage) CreateAnimal(in *Animal) (*Animal, error) {
 	defer stmt.Close()
 
 	err = stmt.QueryRow(
-		 in.Name,
-		 in.Age,
-		 in.PhotoUrl,
+		in.Name,
+		in.Age,
+		in.PhotoUrl,
 	).Scan(
 		&(in.Id),
 	)
 
 	return in, err
 }
-
 
 func (storage *PostgreStorage) DeleteAnimal(id uint32) error {
 	stmt, err := storage.db.Prepare("DELETE FROM animals WHERE id=$1;")
@@ -43,7 +42,6 @@ func (storage *PostgreStorage) DeleteAnimal(id uint32) error {
 
 	return nil
 }
-
 
 func (storage *PostgreStorage) GetAnimal(id uint32) (*Animal, error) {
 	stmt, err := storage.db.Prepare(`
@@ -73,7 +71,6 @@ func (storage *PostgreStorage) GetAnimal(id uint32) (*Animal, error) {
 
 	return ret, nil
 }
-
 
 func (storage *PostgreStorage) UpdateAnimal(updated *Animal) (*Animal, error) {
 	tx, err := storage.db.Begin()

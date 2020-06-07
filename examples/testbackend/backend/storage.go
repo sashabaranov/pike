@@ -32,4 +32,3 @@ func (storage *PostgreStorage) Connect() error {
 	db.SetConnMaxLifetime(30 * time.Minute)
 	return err
 }
-

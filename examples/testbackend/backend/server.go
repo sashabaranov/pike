@@ -2,9 +2,9 @@ package backend
 
 import (
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
 	"os"
-	"io/ioutil"
 )
 
 type Server struct {
@@ -13,7 +13,7 @@ type Server struct {
 }
 
 type ServerConfig struct {
-	ListenAddr string `yaml:"listen_on"`
+	ListenAddr  string `yaml:"listen_on"`
 	DatabaseURI string `yaml:"db_uri"`
 
 	MaxMessageSizeBytes int `yaml:"max_message_size_bytes"`
@@ -54,7 +54,6 @@ func NewServerFromConfig(cfg ServerConfig) *Server {
 		storage: storage,
 	}
 }
-
 
 func (s *Server) Cleanup() {
 	s.storage.db.Close()
