@@ -22,7 +22,7 @@ Run: `pike project.yaml`
 
 <img src="https://i.imgur.com/DVgPfu8.png" width="70%" />
 
-Generated project can be found ([here](https://github.com/sashabaranov/pike/tree/master/examples))
+Generated project can be found [here](https://github.com/sashabaranov/pike/tree/master/examples)
 
 
 #### Philosophy
