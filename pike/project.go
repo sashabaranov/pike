@@ -2,6 +2,7 @@ package pike
 
 import (
 	"fmt"
+	. "github.com/logrusorgru/aurora"
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
@@ -58,6 +59,7 @@ func (p Project) GenerateSQLMigrations(path string) {
 
 	executeTemplate("initial_migration.up.sql.tmplt", fmt.Sprintf("%s.up.sql", pathPrefix), p)
 	executeTemplate("initial_migration.down.sql.tmplt", fmt.Sprintf("%s.down.sql", pathPrefix), p)
+	fmt.Printf("🌿  Generated SQL migrations into %s directory\n", Bold("sql/migrations"))
 }
 
 func (p Project) GenerateGoFiles(path string) {
@@ -69,7 +71,6 @@ func (p Project) GenerateGoFiles(path string) {
 	}
 
 	for _, filename := range files {
-		fmt.Printf("🌿  Generating %s\n", filename)
 		executeTemplate(
 			fmt.Sprintf("%s.tmplt", filename),
 			filepath.Join(path, filename),
@@ -78,7 +79,6 @@ func (p Project) GenerateGoFiles(path string) {
 	}
 
 	for _, entity := range p.Entities {
-		fmt.Printf("🌸  Generating %ss\n", entity.Name)
 		perEntityFiles := []string{
 			fmt.Sprintf("server_%s.go", entity.Name),
 			fmt.Sprintf("storage_%s.go", entity.Name),
@@ -89,7 +89,6 @@ func (p Project) GenerateGoFiles(path string) {
 		}
 
 		for _, filename := range perEntityFiles {
-			fmt.Printf("\tGenerating %s\n", filename)
 			templateName := strings.ReplaceAll(filename, entity.Name, "entity")
 			executeTemplate(
 				fmt.Sprintf("%s.tmplt", templateName),
@@ -98,19 +97,21 @@ func (p Project) GenerateGoFiles(path string) {
 			)
 		}
 	}
+
+	fmt.Printf("🌿  Generated Go implementation into %s directory\n", Bold(p.Name))
 }
 
 func (p Project) GenerateConfigFiles(path string) {
-	fmt.Println("🌿  Generating config file")
 	executeTemplate(
 		"config.yaml.tmplt",
 		filepath.Join(path, "dev.yaml"),
 		p,
 	)
+
+	fmt.Printf("🌿  Generated %s config file\n", Bold("configs/dev.yaml"))
 }
 
 func (p Project) GenerateLauncher(path string) {
-	fmt.Println("🌿  Generating launch file")
 	executeTemplate(
 		"launcher.go.tmplt",
 		filepath.Join(path, "main.go"),
@@ -119,7 +120,6 @@ func (p Project) GenerateLauncher(path string) {
 }
 
 func (p Project) GenerateBinScripts(path string) {
-	fmt.Println("🌿  Generating bin/ scripts")
 	executeTemplate(
 		"run.sh.tmplt",
 		filepath.Join(path, "run.sh"),
@@ -134,6 +134,8 @@ func (p Project) GenerateBinScripts(path string) {
 
 	os.Chmod(filepath.Join(path, "run.sh"), 0755)
 	os.Chmod(filepath.Join(path, "compile_proto.sh"), 0755)
+
+	fmt.Printf("🌿  Generated %s scripts\n", Bold("bin/"))
 }
 
 func (p Project) CheckDirectoryNotPresent() {
@@ -154,14 +156,27 @@ func (p Project) CreateDirectories() {
 		"bin",
 	}
 
-	for _, dir := range dirs {
+	var dirStr string
+	for ix, dir := range dirs {
 		path := filepath.Join(p.AbsolutePath(), dir)
 		err := os.MkdirAll(path, 0755)
 		if err != nil {
 			log.Fatalf("Error creating directory %s: %v", dir, err)
 		}
-		fmt.Printf("💎 Created directory %s\n", dir)
+		dirStr += dir
+		if ix != len(dirs)-1 {
+			dirStr += ", "
+		}
 	}
+}
+
+func (p Project) CompileProtobuf() {
+	err := p.compileProto()
+	if err != nil {
+		fmt.Printf("❌  Failed to compile protobuf. Try %s yourself\n", Bold(Magenta("bin/compile_proto.sh")))
+	}
+
+	fmt.Printf("🌸  Compiled protobuf. Use %s in the future!\n", Bold(Magenta("bin/compile_proto.sh")))
 }
 
 func (p Project) AbsolutePath() string {
