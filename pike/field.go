@@ -23,7 +23,11 @@ func (f Field) GoType() string {
 
 func (f Field) SQLType() string {
 	if f.SQLTypeOverride != "" {
-		return strings.ToUpper(f.SQLTypeOverride)
+		ret := strings.ToUpper(f.SQLTypeOverride)
+		if f.IsPrimaryKey {
+			ret += " PRIMARY KEY"
+		}
+		return ret
 	}
 
 	if strings.HasPrefix(f.Type, "uint") && f.IsPrimaryKey {
