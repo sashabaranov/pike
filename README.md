@@ -2,6 +2,7 @@
 
 Generate CRUD gRPC backends from single YAML description.
 
+Check out **[Playground](https://backend-playground.transcendent.app/)**!
 
 Pike generates:
 
