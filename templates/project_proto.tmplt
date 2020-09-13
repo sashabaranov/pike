@@ -9,8 +9,7 @@ service {{.ProtoCapsName}} {
     rpc Get{{.ProtoCapsName}}(Get{{.ProtoCapsName}}Request) returns (Get{{.ProtoCapsName}}Response);
     rpc Update{{.ProtoCapsName}}(Update{{.ProtoCapsName}}Request) returns (Update{{.ProtoCapsName}}Response);
     rpc Delete{{.ProtoCapsName}}(Delete{{.ProtoCapsName}}Request) returns (Delete{{.ProtoCapsName}}Response);
-
-    {{- end }}
+{{ end }}
 }
 
 {{- range .Entities }}
@@ -20,6 +19,10 @@ message {{.ProtoCapsName}} {
     {{$field.Type}} {{$field.Name}} = {{inc $index}};
     {{- end}}
 }
+
+{{- end }}
+
+{{- range .Entities }}
 
 message Create{{.ProtoCapsName}}Request {
     {{.ProtoCapsName}} {{.Name}} = 1;
