@@ -58,3 +58,13 @@ func (e Entity) NonPrimaryKeyFields() (fields []Field) {
 	}
 	return
 }
+
+func (e Entity) FieldsForInsert() (fields []Field) {
+	for _, field := range e.Fields {
+		if field.IsPrimaryKey && field.Type != "string" {
+			continue
+		}
+		fields = append(fields, field)
+	}
+	return
+}

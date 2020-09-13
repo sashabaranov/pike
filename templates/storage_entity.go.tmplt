@@ -7,11 +7,11 @@ import ()
 func (storage *PostgreStorage) Create{{$entity.ProtoCapsName}}(in *{{$entity.ProtoCapsName}}) (*{{$entity.ProtoCapsName}}, error) {
 	stmt, err := storage.db.Prepare(`
 		INSERT INTO {{$entity.SQLTableName}}(
-			{{- range $ix, $field := $entity.NonPrimaryKeyFields}}
-			{{$field.Name}}{{- if not (last $ix $entity.NonPrimaryKeyFields)}},{{- end}}
+			{{- range $ix, $field := $entity.FieldsForInsert}}
+			{{$field.Name}}{{- if not (last $ix $entity.FieldsForInsert)}},{{- end}}
 			{{- end }}
 		)
-		VALUES ({{- range $ix, $field := $entity.NonPrimaryKeyFields}}${{inc $ix}}{{- if not (last $ix $entity.NonPrimaryKeyFields)}},{{- end}}{{- end }})
+		VALUES ({{- range $ix, $field := $entity.FieldsForInsert}}${{inc $ix}}{{- if not (last $ix $entity.FieldsForInsert)}},{{- end}}{{- end }})
 		RETURNING {{$entity.PrimaryKeyField.Name}};
 	`)
 	if err != nil {
@@ -20,7 +20,7 @@ func (storage *PostgreStorage) Create{{$entity.ProtoCapsName}}(in *{{$entity.Pro
 	defer stmt.Close()
 
 	err = stmt.QueryRow(
-		{{- range $ix, $field := $entity.NonPrimaryKeyFields}}
+		{{- range $ix, $field := $entity.FieldsForInsert}}
 		 in.{{$field.GoName}},
 		{{- end }}
 	).Scan(
