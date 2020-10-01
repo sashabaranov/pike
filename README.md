@@ -1,12 +1,6 @@
 # Pike
 
-> A complex system that works is invariably found to have evolved from a simple system that worked. A complex system designed from scratch never works and cannot be patched up to make it work. You have to start over with a working simple system. 
->
-> — Gall's Law
-
-Pike let's you create simple backend quickly and does not impose any limitations afterwards.
-
-With Pike you can generate CRUD gRPC backends from single YAML description.
+Generate CRUD gRPC backends from single YAML description.
 
 Check out **[Playground](https://backend-playground.transcendent.app/)**!
 
@@ -34,7 +28,12 @@ Generated project can be found [here](https://github.com/sashabaranov/pike/tree/
 
 #### Philosophy
 
-Pike is designed to simplify product development. It enables you to give high-level project description at the start and once project is generated Pike does not impose any limitations on what you can do with it. It is not a framework like RoR or Django, just a helpful generator tool.
+
+> A complex system that works is invariably found to have evolved from a simple system that worked. A complex system designed from scratch never works and cannot be patched up to make it work. You have to start over with a working simple system. 
+>
+> — Gall's Law
+
+Pike let's you create simple systems quickly and does not impose any limitations afterwards. 
 
 Pike's name originates from Russian [fairy tale](https://en.wikipedia.org/wiki/At_the_Pike%27s_Behest)
 
