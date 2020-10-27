@@ -1,6 +1,7 @@
 #!/bin/bash
 protoc \
-    --go_out=plugins=grpc:$GOPATH/src/{{.GoImportPath}}/{{.Name}} \
+    --go_out=$GOPATH/src/{{.GoImportPath}}/{{.Name}} \
+    --go-grpc_out=$GOPATH/src/{{.GoImportPath}}/{{.Name}} \
     -I $GOPATH/src \
     -I $GOPATH/src/{{.GoImportPath}}/proto \
     $GOPATH/src/{{.GoImportPath}}/proto/{{.Name}}.proto
