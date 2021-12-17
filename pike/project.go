@@ -2,13 +2,14 @@ package pike
 
 import (
 	"fmt"
-	. "github.com/logrusorgru/aurora"
-	"gopkg.in/yaml.v2"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	. "github.com/logrusorgru/aurora"
+	"gopkg.in/yaml.v2"
 )
 
 type Project struct {
@@ -153,7 +154,8 @@ func (p Project) CreateDirectories() {
 		p.Name,
 		"sql/migrations",
 		"configs",
-		"cli",
+		"cmd",
+		"cmd/backend",
 		"bin",
 	}
 

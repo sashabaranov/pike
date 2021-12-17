@@ -38,11 +38,11 @@ func main() {
 	proj.GenerateSQLMigrations(filepath.Join(projectDir, "sql/migrations"))
 	proj.GenerateGoFiles(filepath.Join(projectDir, proj.Name))
 	proj.GenerateConfigFiles(filepath.Join(projectDir, "configs"))
-	proj.GenerateLauncher(filepath.Join(projectDir, "cli"))
+	proj.GenerateLauncher(filepath.Join(projectDir, "cmd/backend"))
 	proj.GenerateBinScripts(filepath.Join(projectDir, "bin"))
 	proj.CompileProtobuf()
-	proj.RunGoFmt()
 	proj.RunGoModInit()
+	proj.RunGoModTidy()
 
 	proj.PrintOutro()
 }

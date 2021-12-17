@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -e
 
 PROJ=github.com/sashabaranov/testbackend
 DIR=$GOPATH/src/$PROJ

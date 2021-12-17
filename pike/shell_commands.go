@@ -18,17 +18,17 @@ func (p Project) compileProto() (err error) {
 	return
 }
 
-func (p Project) RunGoFmt() {
-	cmd := exec.Command("go", "fmt", filepath.Join(p.AbsolutePath(), p.Name))
+func (p Project) RunGoModInit() {
+	cmd := exec.Command("go", "mod", "init")
 	cmd.Dir = p.AbsolutePath()
 	err := cmd.Run()
 	if err != nil {
-		log.Fatalf("Error executing go fmt: %v", err)
+		log.Fatalf("Error executing go mod init: %v", err)
 	}
 }
 
-func (p Project) RunGoModInit() {
-	cmd := exec.Command("go", "mod", "init")
+func (p Project) RunGoModTidy() {
+	cmd := exec.Command("go", "mod", "tidy")
 	cmd.Dir = p.AbsolutePath()
 	err := cmd.Run()
 	if err != nil {

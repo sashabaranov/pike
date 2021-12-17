@@ -44,6 +44,7 @@ func (f Field) SQLType() string {
 		"int64":  "BIGINT",
 		"string": "TEXT",
 		"float":  "REAL",
+		"bool":   "BOOLEAN",
 	}[f.Type]
 
 	if sqlType == "" {
