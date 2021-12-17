@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package {{.Name}};
-option go_package = ".;{{.Name}}";
+option go_package = "{{.GoImportPath}}/{{.Name}};{{.Name}}";
 
 service {{.ProtoCapsName}} {
     {{- range .Entities }}

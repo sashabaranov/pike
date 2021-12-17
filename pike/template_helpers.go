@@ -1,12 +1,16 @@
 package pike
 
 import (
+	"embed"
 	"fmt"
 	"log"
 	"os"
 	"reflect"
 	"text/template"
 )
+
+//go:embed templates
+var templatesFS embed.FS
 
 var templateFuncMap = template.FuncMap{
 	"inc": func(i int) int {
@@ -18,14 +22,14 @@ var templateFuncMap = template.FuncMap{
 }
 
 func executeTemplate(templateName, outputPath string, data interface{}) {
-	templatePath := fmt.Sprintf("/templates/%s", templateName)
+	templatePath := fmt.Sprintf("templates/%s", templateName)
 
-	templateText, present := Assets.Files[templatePath]
-	if !present {
-		log.Fatalf("Could not find template %s", templatePath)
+	templateBytes, err := templatesFS.ReadFile(templatePath)
+	if err != nil {
+		log.Fatalf("Error loading template %s: %v", templateName, err)
 	}
 
-	t, err := template.New(templateName).Funcs(templateFuncMap).Parse(string(templateText.Data))
+	t, err := template.New(templateName).Funcs(templateFuncMap).Parse(string(templateBytes))
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
