@@ -37,7 +37,7 @@ func LoadConfig() ServerConfig {
 	}
 
 	config := ServerConfig{}
-	err = yaml.Unmarshal([]byte(content), &config)
+	err = yaml.Unmarshal(content, &config)
 	if err != nil {
 		log.Fatalf("Error parsing config: %v", err)
 	}
